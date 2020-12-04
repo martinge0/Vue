@@ -9,3 +9,9 @@ GitLens /за сега не го инсталирам/
 Better Comments /за сега не го инсталирам/
 Plastic /Тема за сега не го инсталирам/
 Night Owl /Тема за сега не го инсталирам/
+
+
+ Vue Devtools /за браузъра/
+ 
+ Install nodejs
+ npm install vue /в конкретна директория на проекта/
