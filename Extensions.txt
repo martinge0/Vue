@@ -1,0 +1,11 @@
+Vetur
+Quokka
+Auto Close Tag
+Auto Import
+Bracket Pair Colorizer
+ESLint
+Prettier /CMD + Shift + P => format document or selection/
+GitLens /за сега не го инсталирам/
+Better Comments /за сега не го инсталирам/
+Plastic /Тема за сега не го инсталирам/
+Night Owl /Тема за сега не го инсталирам/
