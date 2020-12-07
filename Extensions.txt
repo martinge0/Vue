@@ -13,5 +13,5 @@ Night Owl /Тема за сега не го инсталирам/
 
  Vue Devtools /за браузъра/
  
- Install nodejs
+ npm init /в конкретна директория на проекта/ това създава package.json
  npm install vue /в конкретна директория на проекта/
