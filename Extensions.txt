@@ -9,6 +9,8 @@ GitLens /за сега не го инсталирам/
 Better Comments /за сега не го инсталирам/
 Plastic /Тема за сега не го инсталирам/
 Night Owl /Тема за сега не го инсталирам/
+Аbyss
+Flat UI Dark
 
 
  Vue Devtools /за браузъра/ Alow acces to file urls трябва да е разрешено от настройките на добавката.
