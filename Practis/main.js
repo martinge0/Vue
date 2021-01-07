@@ -2,80 +2,70 @@ Vue.component("product", {
   props: {
     premium: {
       type: Boolean,
-      required: true,
-    },
+      required: true
+    }
   },
-
   template: `
   <div class="product">
   <div class="product-image">
-    <img v-bind:src="image" />
+    <img :src="image" alt="" />
   </div>
   <div class="product-info">
-    <h1>{{ product }}</h1>
-    <!-- <a :href="url">More products like this</a> -->
-    <p v-if="inStock">In Stock</p>
-    <p v-else :class="{outOfStock: !inStock}">Out of Stock</p>
-    <span v-if="onSale">On Sale!</span>
-    <p>{{shipping}}</p>
-    <ul>
-      <li v-for="detail in details">{{detail}}</li>
-    </ul>
-
-    <div
-      v-for="variant in variants"
-      :key="variant.variantId"
-      class="color-box"
-      :style="{backgroundColor: variant.variantColor}"
-      v-on:mouseover="updateProduct(variant.variantImage)">
+    <h1>{{product}}</h1>
+    <p v-if="inStock > 10">In Stock</p>
+    <p v-else-if="inStock <= 10 && inStock > 1">All most sold!</p>
+    <p v-else :class="{outOfStock: inStock < 1}">Out of Srock</p>
+    <p>Shipping is {{shipping}}</p>
+    <li v-for="detail in details">{{detail}}</li>
+    <div v-for="(variant, index) in variants"
+    :key="variants.key"
+    class="color-box"
+    :style="{backgroundColor: variant.color}"
+    v-on:mouseover="updateProduct(index)">
     </div>
-    <button v-on:click="addToCart" :disabled="!inStock" :class="{disabledButton: !inStock}">Add to Cart</button>
-    <div class="cart">
-      <p>Cart({{cart}})</p>
-    </div>
+    <button v-on:click="addToCart" :disabled="inStock < 1" :class="{disabledButton: inStock < 1}">Add to Cart</button>
   </div>
 </div>
-    `,
+  `,
   data() {
     return {
-      style: { color: "blue", fontSize: "13px" },
-      style2: { margin: "5px", padding: "20px" },
       product: "Socs",
-      brand: "Vue Mastery",
-      image: "./assets/vmSocks-green-onWhite.jpg",
-      inStock: true,
-      onSale: true,
-      details: ["80 % Coton", "20% Poliester", "Gender neutral"],
+      description: "Gender neutral",
+      selectedVariant: 0,
+      details: ["80% coton", "20% poliester", "Gender-neutral"],
       variants: [
         {
-          variantId: 234,
-          variantColor: "green",
-          variantImage: "./assets/vmSocks-green-onWhite.jpg",
+          key: 1234,
+          color: "green",
+          image: "./assets/vmSocks-green-onWhite.jpg",
+          quantity: 10,
         },
         {
-          variantId: 235,
-          variantColor: "blue",
-          variantImage: "./assets/vmSocks-blue-onWhite.jpg",
+          key: 1235,
+          color: "blue",
+          image: "./assets/vmSocks-blue-onWhite.jpg",
+          quantity: 0,
         },
       ],
-      cart: 0,
-
     };
   },
   methods: {
-    addToCart() {
-      this.cart += 1;
+    addToCart: function () {
+      this.$emit("add-to-cart", this.variants[this.selectedVariant].key)
     },
-    updateProduct(variantImage) {
-      this.image = variantImage;
+    updateProduct: function (index) {
+      this.selectedVariant = index;
     },
   },
   computed: {
-    title() {
-      return this.brand + " " + this.product;
+    image() {
+      return this.variants[this.selectedVariant].image;
     },
-    shipping() {
-      if (this.premium){
+    inStock() {
+      return this.variants[this.selectedVariant].quantity;
+    },
+    shipping(){
+      if(this.premium){
         return "Free"
       }
       return 2.99
@@ -83,9 +73,16 @@ Vue.component("product", {
   },
 });
 
+
 var app = new Vue({
   el: "#app",
-  data: {
-    premium: false,
+  data:{
+    premium: true,
+    cart: [ ],
   },
+  methods: {
+    updateCart: function(id){
+      this.cart.push(id)
+    }
+  }
 });

@@ -1,3 +1,4 @@
+es6-string-html
 Vetur
 Quokka
 Auto Close Tag
