@@ -2,8 +2,8 @@ Vue.component("product", {
   props: {
     premium: {
       type: Boolean,
-      required: true
-    }
+      required: true,
+    },
   },
   template: `
   <div class="product">
@@ -24,8 +24,22 @@ Vue.component("product", {
     v-on:mouseover="updateProduct(index)">
     </div>
     <button v-on:click="addToCart" :disabled="inStock < 1" :class="{disabledButton: inStock < 1}">Add to Cart</button>
-  </div>
+
+
 </div>
+<div>
+<h2>Reviws</h2>
+<p v-if="!rewies.length">There are no reviews yet</p>
+<ul>
+  <li v-for="review in rewies">
+    <p>{{review.name}}</p>
+    <p>Rate:{{review.rating}}</p>
+    <p>{{review.review}}</p>
+  </li>
+</ul>
+
+
+<product-review @review-submited="addReview"></product-review>
   `,
   data() {
     return {
@@ -47,15 +61,19 @@ Vue.component("product", {
           quantity: 0,
         },
       ],
+      rewies:[],
     };
   },
   methods: {
     addToCart: function () {
-      this.$emit("add-to-cart", this.variants[this.selectedVariant].key)
+      this.$emit("add-to-cart", this.variants[this.selectedVariant].key);
     },
     updateProduct: function (index) {
       this.selectedVariant = index;
     },
+    addReview: function(productReview){
+      this.rewies.push(productReview)
+    }
   },
   computed: {
     image() {
@@ -64,25 +82,72 @@ Vue.component("product", {
     inStock() {
       return this.variants[this.selectedVariant].quantity;
     },
-    shipping(){
-      if(this.premium){
-        return "Free"
+    shipping() {
+      if (this.premium) {
+        return "Free";
       }
-      return 2.99
+      return 2.99;
     },
   },
 });
 
+Vue.component("product-review", {
+  template: `
+  <form class="review-form" @submit.prevent="onSubmit">
+    <p>
+      <label for="name">Name:</label>
+      <input id="name" v-model="name"></input>
+    </p>
+    <p>
+      <label for="review">Review:</label>
+      <textarea id="review" v-model="review"></textarea>
+    </p>
+    <p>
+      <label for="rating">Rating:</label>
+      <select id="rating" v-model.number="rating">
+      <option>5</option>
+      <option>4</option>
+      <option>3</option>
+      <option>2</option>
+      <option>1</option>
+      </select>
+    </p>
+    <p>
+      <input type="submit" value="Submit"></input>
+    </p>   
+  </form>
+  `,
+  data() {
+    return {
+      name: null,
+      review: null,
+      rating: null,
+    };
+  },
+  methods:{
+    onSubmit(){
+      let productReview = {
+        name: this.name,
+        review: this.review,
+        rating: this.rating,
+      }
+      this.$emit("review-submited", productReview)
+      this.name = null
+      this.review = null
+      this.rating = null
+    },
+  },
+});
 
 var app = new Vue({
   el: "#app",
-  data:{
+  data: {
     premium: true,
-    cart: [ ],
+    cart: [],
   },
   methods: {
-    updateCart: function(id){
-      this.cart.push(id)
-    }
-  }
+    updateCart: function (id) {
+      this.cart.push(id);
+    },
+  },
 });
